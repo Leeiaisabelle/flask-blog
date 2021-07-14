@@ -1,4 +1,6 @@
 .venv
 __pycache__
 *.pyc
+python3-virtualenv
 .env
+flask.sqlite

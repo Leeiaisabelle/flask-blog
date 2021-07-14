@@ -1,5 +1,4 @@
 import os
-import click
 from flask import Flask, request, render_template, send_from_directory
 from flask.cli import FlaskGroup, ScriptInfo, with_appcontext
 from dotenv import load_dotenv
@@ -20,6 +19,23 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://{user}:{passwd}@{
     table=os.getenv('POSTGRES_DB'))
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+
+class UserModel(db.Model):
+    __tablename__ = 'users'
+
+    username = db.Column(db.String(), primary_key=True)
+    password = db.Column(db.String())
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def __repr__(self):
+        return f"<User {self.username}>"
 
 @app.route('/')
 def index():
@@ -56,8 +72,8 @@ def register():
         else:
             return error, 418
 
-    ## TODO: Return a restister page
-    return "Register Page not yet implemented", 501
+    ## TODO: Return a register page
+    return render_template('register.html', title="Register")
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
@@ -81,7 +97,8 @@ def login():
             return error, 418
     
     ## TODO: Return a login page
-    return "Login Page not yet implemented", 501
+    return render_template('login.html', title="Login")
+
 
 def init_db():
     db = get_db()
