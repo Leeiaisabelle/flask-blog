@@ -21,8 +21,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://{user}:{passwd}@{
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
+migrate = Migrate(app, db)
 
 class UserModel(db.Model):
     __tablename__ = 'users'
